@@ -31,3 +31,17 @@ user can also see images side by side with thumbs,
 or either in Full screen.
 
 So. this is my mentor project for Vth SEM.
+
+
+TECHNOLOGY USED:
+ Django, Python, HTML, CSS, JavaScript.
+Database: 
+ Sqlite3 (django's default) can be configured
+ to another also.
+
+Sample data:
+ username: USER1
+ password: Firstpass
+
+ username: USER2
+ password: Secondpass
