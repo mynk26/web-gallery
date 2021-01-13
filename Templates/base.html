@@ -1,0 +1,254 @@
+
+<head>
+  {% load static %}  
+	<meta charset='UTF-8' name='viewport' content="width=device-width,initial-scale=1.0">
+    <link rel='stylesheet' href="{% static 'css/bootstrap.min.css' %}" media='screen'>
+  <!-- Our project just needs Font Awesome Free's Solid + Brand files -->
+  <link href="{% static 'fontawesome_free/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesome_free/css/brands.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesome_free/css/solid.css' %}" rel="stylesheet" type="text/css">
+  <script type="text/javascript"  src="{% static 'js/jquery-3.5.1.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+  <style>
+
+        #iframe{
+          margin-top:4%;
+          height:95%;
+          width:98%;
+        }
+        .detail{
+          color:white;
+        }
+		.detailfs{
+          color:white;
+        }
+	    .imageindex{
+            overflow-y: scroll;
+            height:90%;
+	    }
+
+	    .selectedthumb{
+	      border: 2px solid red;
+	      padding:5px;
+	    }
+	    .fsdiv{
+	      margin-left:1px;
+	      margin-top:1.5%;;
+	      background-color:#191b1f;
+	      position: absolute;
+	      align:center;
+          top: 0;
+          left: 0;
+          max-width: 100%;
+          max-height: 100%;
+          min-width:100%;
+          z-index:99;
+	    }
+        .fsimg{
+            position:relative;
+	        max-height:50%;
+	        max-width: 100%;
+	        height:30em;
+	        width:auto;
+        }
+
+	    .selected{
+	        background-color:white;
+	        position:fixed;
+	        max-width: 100%;
+	        max-height:30%;
+	    }
+	    img.selected{
+	        position:relative;
+	        max-height:25%;
+	        max-width: 100%;
+	        height:16em;
+	    }
+
+
+	    .nav-item{
+	      vertical-align: bottom;
+	      padding-right:15px;
+	    }
+	    .nav-item:hover{
+	      vertical-align: bottom;
+	      padding-right:13px;
+	      font-size:20px;
+	    }
+
+
+	    .fa:hover,.fas:hover{
+	      font-size:20px;
+
+	    }
+	    fa-heart:hover{
+	      font-size:1.4em;
+	    }
+        .fa-home:hover{
+            font-size:41px;
+            padding-left:-2px;
+          }
+
+
+        .card:hover {
+          width:102%;
+          margin: auto;
+        }
+	    .card {
+	      padding:3px;
+          text-align: center;
+          cursor: pointer;
+          max-height:13em;
+        }
+
+
+	    ::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+          background: #5550;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+          background: #666;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #999;
+        }
+
+		.sidebar {
+		  margin: 0;
+		  padding: 0;
+		  width:19%;
+		  background-color: #f1f1f1;
+		  position: fixed;
+		  height: 95%;
+		  overflow: auto;
+		}
+
+		/* Sidebar links */
+		.sidebar a {
+		  display: block;
+		  color: black;
+		  padding: 16px;
+		  text-decoration: none;
+		}
+
+		/* Active/current link */
+		.sidebar a.active {
+		  background-color: #292b2c;
+		  color: white;
+		}
+
+		/* Links on mouse-over */
+		.sidebar a:hover:not(.active) {
+		  background-color: #555;
+		  color: white;
+		}
+
+		/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+		div.content {
+		  margin-left: 200px;
+		  padding: 1px 16px;
+		  height: 1000px;
+		}
+		.sidebarlink{
+			display:None;
+		  }
+
+		/* On screens that are less than 700px wide, make the sidebar into a topbar */
+		@media screen and (max-width: 720px) {
+
+		.fsdiv{
+		  margin-left:0.5px;
+	      background-color: #292b2c;
+	      position: fixed;
+          top: 0;
+          left: 0;
+          height:40em;
+          max-width: 100%;
+          max-height: 92%;
+          min-width:100%;
+          z-index:99;
+          overflow-y:scroll;
+	    }
+        .fsimg{
+            margin-top:2px;
+            position:relative;
+	        max-height:60%;
+	        max-width: 100%;
+	        height:auto;
+	        width:auto;
+        }
+        .fsbtn{
+
+        }
+        
+        .detail{
+          display:None;
+        }
+
+        #iframe{
+          margin-top:20%;
+          height:95%;
+          width:100%;
+        }
+
+
+	    .selected{
+	        background-color:white;
+	        position:fixed;
+	        max-width: 100%;
+	        max-height:30%;
+	    }
+	    img.selected{
+	        position:relative;
+	        max-height:25%;
+	        max-width: 100%;
+	        height:35em;
+	    }
+
+		  .imageindex{
+		    position: absolute;
+            bottom: 20px;
+            overflow-y: scroll;
+            height:55%;
+            margin-left:0.5px;
+	        }
+
+	        .keyimageindex{
+		    position: absolute;
+            bottom: 10px;
+            overflow-y: scroll;
+            height:50%;
+            margin-left:0.5px;
+	        }
+	    .card:hover {
+          width:101%;
+          margin-left:5px;
+        }
+	    .card {
+          margin-bottom: 1rem;
+          padding: 2px;
+          text-align: center;
+          cursor: pointer;
+          height:100px;
+        }
+		}
+
+
+	</style>
+  <script src="{% static 'js/waypoints/lib/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'js/waypoints/lib/shortcuts/infinite.min.js' %}"></script>
+</head>
+<body class="bg-dark" style=" overflow:hidden;">
+
+  {% block content %}
+  {% endblock %}
+
+</body>

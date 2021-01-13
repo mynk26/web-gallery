@@ -1,0 +1,69 @@
+{% extends 'base.html'%}
+{% block content%}
+{% load static %}
+
+<nav class="navbar navbar-expand-lg  navbar-dark bg-dark" style="position:absolute; width:100%;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="../home"><i class="fas fa-home fa-2x"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav" style='margin-left:auto;'>
+        <li class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+          <a class='nav-link' onclick="Updateiframe('../images/link/searchbyface/')" ><i class="fab fa-searchengin " data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"></i></h5></a>
+      </li>
+        <li class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+        <a class='nav-link' onclick="Updateiframe('../images/addphoto/')"><b><i class="fas fa-upload "></i></b></a>
+      </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+           <i class="fas fa-user-friends"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              {% for folder in facefolder %}
+            <li><a class="dropdown-item" onclick="Updateiframe('../images/links/{{folder}}/')"><h6 data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">{{folder}}</h6></a></li>
+            {% endfor %}
+            <li><a class="dropdown-item" onclick="Updateiframe('../images/addfolder/face')"><i class="fas fa-folder-plus" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"></i></a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-folder"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
+              {% for folder in folders %}
+            <li><a class="dropdown-item" onclick="Updateiframe('../images/links/{{folder}}/')"><h6 data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">{{folder}}</h6></a></li>
+            {% endfor %}
+            <li><a class="dropdown-item" onclick="Updateiframe('../images/addfolder/folder')"><i class="fas fa-folder-plus" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"></i></a></li>
+          </ul>
+        </li>
+        <li class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+        <a  class='nav-link' onclick="Updateiframe('../images/link/deletesuggestions/')"><i class="fas fa-trash-alt"></i></a>
+        </li>
+        <li class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+          <a class='nav-link' onclick="Updateiframe('../images/link/liked/')"><b><h5><i class="fas fa-heart "></i></h5></b></a>
+        </li>
+        <li class="nav-item" >
+          <a class="nav-link" href="../logout/">Logout &larr;]</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</nav>
+
+
+
+<center id='center'>
+<iframe src='../images/links/All/' id='iframe'  >
+</iframe>
+</center>
+<script>
+	function Updateiframe(url){
+		ele=document.getElementById('iframe')
+		ele.src=url
+
+	}
+</script>
+{% endblock %}
