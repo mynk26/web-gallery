@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style='background-color:white; margin:auto; border-radius:20px;'>
+<center style='margin-top:8em;  border-style:outset; border-radius:10px' >
+			<h2 style='border-radius:10px; color:white;' class='bg-dark p-2'>Add {% if formtype == 'Folder' %}Folder{% else %}Image{% endif %}</h2><b>
+			<form method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				{% for field in form %}
+				<p>
+					<div class='form-group' >
+						{{ field.label_tag }}
+					</div>
+					<div class='form-group' >
+						{{ field }}
+					</div>
+					{% if field.help_text %}
+					<small style="color: grey">{{ field.help_text }}</small>
+					{% endif %}
+						{% for error in field.errors %}
+				<p style="color: #ff0000">{{ error }}</p>
+				{% endfor %}
+				</p>
+				{% endfor %}
+				<button type="submit" onclick="showbuffering()" id='submit' class='btn btn-primary col-3'> <span class="spinner-border" style='display:None;' role="status" id="buffer"></span> Upload</button>
+			</form>
+</center>
+<script>
+
+		function showbuffering(){
+		  b_div = document.getElementById('buffer')
+		  s_btn = document.getElementById('submit')
+		  input_fild = document.getElementById('id_images')
+		  if(input_fild.files.length!=0){
+		  s_btn.setAttribute('style','opacity: 0.5;');
+		  b_div.setAttribute('style','display:block;');
+			};
+		};
+	</script>
+{% endblock %}

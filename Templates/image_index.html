@@ -1,0 +1,546 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+{% if view == 'key' %}
+
+{% endif %}
+
+<script>
+
+function replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+    }
+    function getindexmapping(val){
+        val = replaceAll(val,'&#x27;','"')
+        val = replaceAll(val,'(','')
+        val = replaceAll(val,')','')
+        val = replaceAll(val,': ',':')
+        val = replaceAll(val,', ',' , ')
+        return val
+        }
+
+    itot_temp =  getindexmapping('{{itmap.itot|safe}}')
+    ttoi_temp = getindexmapping('{{itmap.ttoi|safe}}')
+    ttod_temp = getindexmapping('{{itmap.ttod|safe}}')
+    itot = jQuery.parseJSON(itot_temp);
+    ttoi = jQuery.parseJSON(ttoi_temp);
+    ttod = jQuery.parseJSON(ttod_temp);
+    delete itot_temp
+    delete ttoi_temp
+    delete ttod_temp
+
+     function ttodfunction(thumb){
+        return (thumb in ttod)
+    }
+
+</script>
+<div id="selectedsuperdiv" class="col-md-6 col-12 selected bg-dark p-1 " >
+
+  <input val="" id="selected_image_value" hidden/>
+  <input val="" id="selected_thumb_value" hidden/>
+    {% if view == 'key'%}
+        <h5 class="col-12" style="color:white; position:absolute;">
+            <span id="thisname">{{thiskey}}</span><br>
+            <span onclick="ToggleRename('block')" class="col-2" id="edit" ><i class="fas fa-edit fa-xs"></i></span>
+            <sapn onclick="ToggleRename('None')" class="col-2" id="close" style="display:None;"><i class="fas fa-times fa-xs"></i></sapn>
+        </h5>
+        <div id="renameform"style="display:None;">
+		<br><br>
+            <a class="btn btn-sm btn-danger col-4 col-md-2 " onclick="return confirm('Delete this Folder?')" href="../../deletefolder/{{thiskey}}">Delete</a>
+            <hr>
+            <input type="text" class="col-11 col-md-6" id="renameField"/>
+            <button onclick="renamefunction()" class="btn btn-primary col-11 col-md-2">Rename</button>
+            <hr>
+        </div>
+    {% endif %}
+
+
+      <div id='selecteddiv' class=" row">
+          <center>
+          <img class=' rounded-lg selected'  id="selected" alt="No image to load if you deleted pelease refresh the page to get smooth slides"/>
+              <div id="fsbtndiv" class='bgidark'>
+          <span class="btn btn-secondary col-2 " id="p" onclick="crousel(id)">Prev.</span>
+          <i class="fas fa-expand btn col-2 " id="expand" val="0" style="color:white"></i>
+          <span class="btn btn-secondary col-2 " id="n" onclick="crousel(id)">Next</span>
+
+
+  <div style="height:3em;" id='singleselops' class="p-2 border border-secondary">
+      {% if view == 'delete' %}
+        <a onclick="keep()" style="color:white;"><i class="fas fa-save col-2"></i></a>
+      {% endif %}
+      <label class="fas fa-copy" style="color:white">Copy</label>
+    <select id="select" onchange="copyto()"  style="color:white; width:20px;" class=" bg-dark">
+      <option value="00" class="bg-dark"><i class="fas fa-copy"></i></option>
+      {% for folder in folders %}
+      <option value="{{folder}}"><a href="" >{{folder}}</a></option>
+      {% endfor %}
+    </select>
+      {% if view == 'key' %}
+            <label class="fas fa-copy" style="color:white">Move</label>
+            <select id="select_move" onchange="moveto()" style="color:white; width:20px;" class=" bg-dark">
+                <option value="00" class="bg-dark"><a>Move TO</a></option>
+                <option value="Remove"><a href="" >Remove from this folder</a></option>
+                {% for folder in folders %}
+                    <option value="{{folder}}"><a  href="" >{{folder}}</a></option>
+                {% endfor %}
+            </select>
+      {% endif %}
+  <span id="likeimg" onclick="likefunction()" class="fa fa-heart fa-lg col-2" style="color:white;"></span>
+  <a  id="download_btn" download class=" offset-md-5 offset-2 col-2"><i class="fas fa-download" style="color:white;"></i></a>
+  <spna id="delete_btn" class=" col-2" onclick="return confirm('Are you sure to delete?')?delete_function():''"><i class="fas fa-trash-alt" style="color:white;"></i></spna>
+  </div>
+      <div style="display:None;" id='multiselops' class="p-1 border border-secondary">
+          {% if view == 'delete' %}
+        <a id="keepop" onclick="domulseops(id)" style="color:white;"><i class="fas fa-save col-2"></i></a>
+      {% endif %}
+
+          <label class="fas fa-copy" style="color:white">Copy</label>
+          <select id="copyop" onchange="domulseops(id)" style="color:white; width:20px;" class=" bg-dark">
+              <option value="00" class="bg-dark"></option>
+              {% for folder in folders %}
+              <option value="{{folder}}"><a href="" >{{folder}}</a></option>
+              {% endfor %}
+            </select>
+          {% if view == 'key' %}
+          <label class="fas fa-copy" style="color:white">Move</label>
+            <select id="moveop" onchange="domulseops(id)" style="color:white; width:20px;" class=" bg-dark">
+              <option value="00" class="bg-dark"></option>
+              <option value="Remove"><a href="" >Remove from this folder</a></option>
+              {% for folder in folders %}
+              <option value="{{folder}}"><a href="" >{{folder}}</a></option>
+              {% endfor %}
+            </select>
+          {% endif %}
+      <span  id="likeop" onclick="domulseops(id)" class="fa fa-heart fa-lg col-2" style="color:white; "></span>
+      <span  id="downloadop" onclick="domulseops(id)" class=" offset-2  offset-md-5 col-2"><i class="fas fa-download fa-lg" style="color:white;"></i></span>
+      <span  id="deleteop" class=" col-2" onclick="return confirm('Are you sure to delete?')?domulseops(id):''"><i class="fas fa-trash-alt fa-lg" style="color:white;"></i></span>
+      </div>
+                  <div id="detail" class="detail" ></div>
+              </div>
+          </center>
+      </div>
+</div>
+
+  <div class="infinite-container offset-md-6 col-12 col-md-6 imageindex flex-row  row  border border-secondary mt-4 p-0" {% if view == "key" %} class="keyimageindex" {% endif %} >
+      <div style="z-index:1;margin-bottom:40px;">
+        <div col-5 style="position:fixed; width:100%; ">
+        <label for="multiselect" style="opacity:1;" class="btn col-11 btn-secondary col-md-2"><input   onchange="deselectAll()" type="checkbox" id='multiselect'/>  Select Multiple</label>
+        </div>
+      </div>
+        {% if view == 'key' or view == 'search' %}
+            {% for image in images %}
+                    <div id="{{image.1}}thumbdate" style="color:white; display:none"><hr></div>
+                 <div class="infinite-item col-6 bg-dark p-2"  id="{{image.1}}" status="0" onclick="return multiselect()?selection('{{image.0}}','{{image.1}}'):loadimage('{{image.0}}','{{image.1}}')"><img src="../../{{image.1}}"  class='border col-12 card border-secondary rounded-lg' /></div>
+                    <script>
+                    if(ttodfunction('{{image.1}}')){
+                        var tag = document.createElement("p");
+                       var text = document.createTextNode(ttod['{{image.1}}']);
+                       tag.appendChild(text);
+                       var element = document.getElementById("{{image.1}}thumbdate");
+                       element.appendChild(tag);
+                       element.style='color:white; display:block margin-top:10px;';
+                    }
+                    </script>
+            {% endfor %}
+        {% else %}
+        {% for image in images %}
+                <div id="{{image.thumb}}thumbdate" style="color:white; display:none"><hr></div>
+            <div class="infinite-item col-6 bg-dark p-2"  id="{{image.thumb}}" status="0" onclick="return multiselect()?selection('{{image.image}}','{{image.thumb}}'):loadimage('{{image.image}}','{{image.thumb}}')">
+                <img src="../../{{image.thumb}}"  class='border col-12 card border-secondary rounded-lg' />
+            </div>
+
+            <script>
+            if(ttodfunction('{{image.thumb}}')){
+                var tag = document.createElement("p");
+               var text = document.createTextNode(ttod['{{image.thumb}}']);
+               tag.appendChild(text);
+               var element = document.getElementById("{{image.thumb}}thumbdate");
+               element.appendChild(tag);
+               element.style='color:white; display:block margin-top:10px;';
+            }
+            </script>
+        {% endfor %}
+      {% endif %}
+
+    {% if images.has_next %}
+    <a class="infinite-more-link" id="more" href="?page={{ images.next_page_number }}">More</a>
+  {% endif %}
+  </div>
+
+  <script>
+
+    $( function () {
+      $( '.notes' ).on( 'click', '.card', function ( e ) {
+      $( this ).parent().remove();
+      } );
+     } );
+
+
+    var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0]
+    });
+
+    function deselectAll(){
+       if(!document.getElementById('multiselect').checked){
+        selectedthumbs = document.querySelectorAll('.selectedthumb')
+        for (i = 0; i < selectedthumbs.length; ++i) {
+            selectedthumbs[i].classList.remove('selectedthumb');
+        }
+            document.getElementById('multiselops').style='display:None;';
+            document.getElementById('singleselops').style='display:block;';
+        }
+        else{
+            document.getElementById('multiselops').style='display:block;';
+            document.getElementById('singleselops').style='display:None;';
+        }
+    }
+
+    function multiselect(){
+      return document.getElementById('multiselect').checked
+    }
+
+    function selection(image,thumb){
+      loadimage(image,thumb)
+      ele = document.getElementById(thumb)
+      status = ele.getAttribute('status')
+      if(status==0){
+        ele.classList.add("selectedthumb");
+        ele.setAttribute('status',1)
+      }
+      else{
+        ele.classList.remove('selectedthumb');
+        ele.setAttribute('status',0)
+      }
+    }
+
+    function domulseops(val){
+        selectedthumbs = document.querySelectorAll('.selectedthumb')
+        lst = []
+        for (i = 0; i < selectedthumbs.length; ++i) {
+            lst+= selectedthumbs[i].id+','
+        }
+        if(val=='copyop'||val=='moveop'){
+            destination = document.getElementById(val).value;
+        }else{
+            destination = 'null';
+        };
+        if(val=='downloadop'){
+            $.ajax({
+                type: "POST",
+                url: "../../downloadfiles/",
+                dataType:"json",
+                data: {
+                    "NodeList": lst,
+                    "op":val,
+                    "destination":destination,
+                    "csrfmiddlewaretoken": "{{csrf_token}}",
+                },
+                complete: function(data){
+                    window.open('../../downloadsaved/','_blank')
+                }
+            });
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "../../multiops/",
+                dataType:"json",
+                data: {
+                    "NodeList": lst,
+                    "op":val,
+                    {% if view == 'key' %}
+                        "thiskey":'{{thiskey}}',
+                    {% endif %}
+                    "destination":destination,
+                    "csrfmiddlewaretoken": "{{csrf_token}}",
+                },
+                complete: function(data){
+                    result = JSON.parse(data.responseText)
+                    alert(result.data)
+                    if(val=='moveop'||val=='deleteop'||val=='keepop'){
+                        if(result.status==1){
+                            for (i = 0; i < selectedthumbs.length; ++i) {
+                                selectedthumbs[i].remove()
+                                crousel('n')
+                            }
+                        }
+                    }
+                },
+            });
+        }
+    }
+
+
+    $('#expand').click(function(){
+        var v = document.getElementById('expand')
+        if(v.getAttribute('val')==1){
+            document.getElementById('selected').classList.remove('fsimg')
+            document.getElementById('selecteddiv').classList.remove('fsdiv')
+            document.getElementById('selected').classList.add('selected')
+            document.getElementById('selectedsuperdiv').classList.add('col-md-5','col-12', 'selected')
+            document.getElementById('fsbtndiv').classList.remove('fsbtn')
+            document.getElementById('detail').classList.add('detail')
+            if(multiselect()){
+                document.getElementById('multiselops').style='display:block;';
+                document.getElementById('singleselops').style='display:None;';
+            }
+            v.setAttribute('val',0)
+        }
+        else{
+            document.getElementById('selected').classList.remove('selected')
+            document.getElementById('selected').classList.add('fsimg')
+            document.getElementById('selecteddiv').classList.add('fsdiv')
+            document.getElementById('selectedsuperdiv').classList.remove('col-md-5','col-12', 'selected')
+            document.getElementById('fsbtndiv').classList.add('fsbtn')
+            document.getElementById('detail').classList.remove('detail')
+            if(multiselect()){
+                document.getElementById('multiselops').style='display:None;';
+                document.getElementById('singleselops').style='display:block;';
+            }
+            v.setAttribute('val',1)
+        }
+    });
+    function maketable(data){
+        table= "<center><table class='table detailfs'><th><td></td><td></td></th>"
+        for (var key in data) {
+            if(key!='status'){
+            value = data[key]
+            table+= "<tr><td><h5>"+key+"</h5></td><td>"+value+"</td></tr>"
+            }
+        }
+        table += "<tf><td><td></td></td></tf></table></center> "
+        console.log(table)
+        return table
+    }
+
+    function loadimage(val,thumb){
+        {% if view == 'delete' %}
+		document.getElementById("selected").src = '../../'+thumb;
+        document.getElementById("selected").src = '../../deleteview/'+val;
+        document.getElementById("download_btn").href='../../deleteview/'+val;
+        {% else %}
+		document.getElementById("selected").src = '../../'+thumb
+        document.getElementById("selected").src = '../../'+val;
+        document.getElementById("download_btn").href='../../'+val;
+        {% endif %}
+        document.getElementById('selected_image_value').val=val;
+        document.getElementById('selected_thumb_value').val=thumb;
+        fetch('../../like/0/'+val)
+        .then((response)=>response.json())
+         .then(function(data){
+            data = JSON.parse(data)
+            document.getElementById('detail').innerHTML=maketable(data)
+            if(data["status"]=='0'){
+              document.getElementById('likeimg').style='color:white;'
+            }
+            else if(data["status"]=='1'){
+              document.getElementById('likeimg').style='color:red;  font-size:1.5em;'
+              setTimeout(() => {  document.getElementById('likeimg').style='color:red;' }, 400);
+            }
+           })
+    };
+    {% if view == 'key' or view == 'search' %}
+        loadimage('{{images.0.0}}','{{images.0.1}}');
+    {% else %}
+        loadimage('{{images.0.image}}','{{images.0.thumb}}');
+    {% endif %}
+
+
+
+
+
+     function crousel(val){
+         thumb = document.getElementById('selected_thumb_value').val
+         c = ttoi[thumb]
+         l = Object.keys(ttoi).length
+        if(val=='n'){
+            if(c==l-1){
+                c = -1
+            }
+            loadimage(itot[c+1].image,itot[c+1].thumb)
+        }
+        else if(val=='p'){
+            if(c==0){
+                c = l
+            }
+             loadimage(itot[c-1].image,itot[c-1].thumb)
+        }
+      }
+
+    function delete_function(){
+        val = document.getElementById('selected_image_value').val
+        thumb=document.getElementById('selected_thumb_value').val
+        fetch('../../delete/'+val)
+        .then((response)=>response.json())
+         .then(function(data){
+            if(data=='Deleted'){
+              var ele = document.getElementById(thumb)
+              ele.remove()
+              crousel('n')
+            }
+           })
+        .catch(function (error) {
+            console.log("Error: " + error);
+          });
+    };
+
+
+    {% if view == 'like' %}
+        function likefunction(){
+            image = document.getElementById('selected_image_value').val;
+            fetch('../../like/1/'+image)
+            .then((response)=>response.json())
+             .then(function(data){
+                data = JSON.parse(data)
+                if(data["status"]=='0'){
+                  document.getElementById('likeimg').style='background-color:white; border:1px; border-radius:50%; '
+                  thumb=document.getElementById('selected_thumb_value').val
+                  var ele = document.getElementById(thumb)
+                  ele.remove()
+                  crousel('n')
+                  document.getElementById('likeimg').style='color:white;'
+                }
+                else if(data["status"]=='1'){
+                  document.getElementById('likeimg').style='color:red; font-size:2em; '
+                }
+               })
+            .catch(function (error) {
+                console.log("Error: " + error);
+              });
+        };
+
+    {% elif view == 'delete' %}
+            function keep(){
+            val = document.getElementById('selected_image_value').val;
+            fetch('../../lastseen/'+val)
+            .then((response)=>response.json())
+             .then(function(data){
+                    alert(data)
+                })
+             .catch(function(error){
+                alert(error)
+             })
+            var thumb = document.getElementById('selected_thumb_value').val;
+            var ele = document.getElementById(thumb)
+            ele.remove()
+            crousel('n')
+            document.getElementById('likeimg').style='color:white';
+            }
+
+            function likefunction(){
+                image = document.getElementById('selected_image_value').val;
+                fetch('../../like/1/'+image)
+                .then((response)=>response.json())
+                 .then(function(data){
+                    data = JSON.parse(data)
+                    if(data["status"]=='0'){
+                      document.getElementById('likeimg').style='color:white;'
+                    }
+                    else if(data["status"]=='1'){
+                      document.getElementById('likeimg').style='color:red; font-size:2em '
+                      keep()
+                      crousel('n')
+                    }
+                   })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                  });
+            };
+    {% else %}
+        function likefunction(){
+            image = document.getElementById('selected_image_value').val;
+            fetch('../../like/1/'+image)
+            .then((response)=>response.json())
+             .then(function(data){
+                console.log(data)
+                data = JSON.parse(data)
+                if(data["status"]=='0'){
+                  document.getElementById('likeimg').style='color:white; '
+                }
+                else if(data["status"]=='1'){
+                  document.getElementById('likeimg').style='color:red; font-size:1.5em;'
+                  setTimeout(() => {  document.getElementById('likeimg').style='color:red;' }, 400);
+                }
+               })
+            .catch(function (error) {
+                console.log("Error: " + error);
+              });
+        };
+    {% endif %}
+    function copyto(){
+        e = document.getElementById('select')
+        selected_id = e.value
+        if(selected_id=='00')
+        {
+         return
+        }
+        val = document.getElementById('selected_image_value').val
+
+        fetch('../../copy/'+selected_id+'/'+val)
+        .then((response)=>response.json())
+         .then(function(data) {
+            alert(data)
+            e.value='00'
+           })
+        .catch(function (error) {
+            console.log("Error: " + error);
+          });
+    };
+    {% if view == 'key' %}
+        function ToggleRename(val){
+          if(val=='None'){
+            inv_val='block'
+          }
+          else{
+            inv_val='None'
+          }
+          document.getElementById('renameform').style='display:'+val+';'
+          document.getElementById('edit').style='display:'+inv_val+';'
+          document.getElementById('close').style='display:'+val+';'
+        };
+
+
+        function renamefunction(){
+            e = document.getElementById('renameField')
+            newname = e.value
+            fetch('../../rename/{{thiskey}}/'+newname)
+            .then((response)=>response.json())
+             .then(function(data) {
+                alert(data)
+               })
+            .catch(function (error) {
+                console.log("Error: " + error);
+              });
+              document.getElementById('thisname').innerHTML=newname
+              parent.location.reload()
+        };
+
+        function moveto(){
+            e = document.getElementById('select_move')
+            selected_id = e.value
+            if(selected_id=='00')
+            {
+                return
+            }
+            val = document.getElementById('selected_image_value').val
+            fetch('../../move/{{thiskey}}/'+selected_id+'/'+val)
+            .then((response)=>response.json())
+            .then(function(data) {
+                alert(data)
+                if(data!='Moved'){ alert('not moved')}
+                else{
+                  var thumb = document.getElementById('selected_thumb_value').val;
+                  var ele = document.getElementById(thumb)
+                  ele.remove()
+                  crousel('n')
+                 }
+                e.value='00'
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+        };
+    {% endif %}
+  </script>
+{% endblock %}
