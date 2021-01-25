@@ -2,7 +2,7 @@
 {% block content %}
 <div style='background-color:white; margin:auto; border-radius:20px;'>
 <center style='margin-top:8em;  border-style:outset; border-radius:10px' >
-			<h2 style='border-radius:10px; color:white;' class='bg-dark p-2'>Add Image</h2><b>
+			<h2 style='border-radius:10px; color:white;' class='bg-dark p-2'>Add {% if formtype == 'Folder' %}Folder{% else %}Image{% endif %}</h2><b>
 			<form method="post" enctype="multipart/form-data">
 				{% csrf_token %}
 				{% for field in form %}

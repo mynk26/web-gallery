@@ -60,7 +60,7 @@ class AddPhotoView(FormView):
             img_path = str(img_obj.image)[:]
             thumb_path = str(img_obj.thumb)[:]
             del img_obj
-            path=(img_path,thumb_path,date.today())
+            path=(img_path,thumb_path,str(timezone.now().date()))
             status = self.Linking(user,path)
             if status != 'OK':
                 break
@@ -228,7 +228,7 @@ class Img(View):
         del img
         return HttpResponse(img_read, content_type="image/jpeg")
 
-class ImgDelete(View):
+class ImgDelete(View):                                                                          #similar view as Img just not updating last seen
     def get(self,request,user_username,type,img_name):
         user = request.user
         if not  user.is_authenticated:
@@ -278,14 +278,16 @@ class DeleteImageView(APIView):
             img = Images.objects.get(user=user,image=image)
             p=str(img.image)
             t=str(img.thumb)
+            d  = str(img.date)
+            print(d,'\n\n\n\n\n\n\n\n\n\n')
             result = img.delete()[0]
             if result == 1:
                 link_obj = Links.objects.get(user=user)
                 link = link_obj.link
                 for key in list(link.keys()):
                     if key!='face_keys':
-                        if (p,t) in link[key]['Image_list']:
-                            link[key]['Image_list'].remove((p,t))
+                        if (p,t,d) in link[key]['Image_list']:
+                            link[key]['Image_list'].remove((p,t,d))
                 link_obj.link = link
                 link_obj.save()
                 del img
@@ -358,7 +360,7 @@ class AddFolder(View):
             form = AddFaceFolderForm()
         else:
             form = AddFolderForm()
-        return render(request,'AddImage.html',{'form':form})
+        return render(request,'AddImage.html',{'form':form,'formtype':'Folder'})
 
     def post(self,request,type):
         user = request.user
