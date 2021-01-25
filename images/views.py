@@ -60,7 +60,7 @@ class AddPhotoView(FormView):
             img_path = str(img_obj.image)[:]
             thumb_path = str(img_obj.thumb)[:]
             del img_obj
-            path=(img_path,thumb_path,str(timezone.now().date()))
+            path=(img_path,thumb_path,date.today())
             status = self.Linking(user,path)
             if status != 'OK':
                 break
@@ -228,7 +228,7 @@ class Img(View):
         del img
         return HttpResponse(img_read, content_type="image/jpeg")
 
-class ImgDelete(View):                                                                          #similar view as Img just not updating last seen
+class ImgDelete(View):
     def get(self,request,user_username,type,img_name):
         user = request.user
         if not  user.is_authenticated:
@@ -248,7 +248,7 @@ class DeleteSuggestionsView(View):
         if not  user.is_authenticated:
             return HttpResponse("<script>window.location.href = '../';alert('User not Found!!!!!!');</script>")
         try:
-            img = Images.objects.filter(user=user,last_seen__lte= date.today() - timedelta(days=0),like=False)
+            img = Images.objects.filter(user=user,last_seen__lte= date.today() - timedelta(days=150),like=False)
             if len(img)==0:
                 return HttpResponse("<script>window.location.href = '../../links/All/';alert('No image found with lastseen more than 150 days!!!!!');</script>")
             itmap = LoadList(img,'All')
@@ -278,16 +278,14 @@ class DeleteImageView(APIView):
             img = Images.objects.get(user=user,image=image)
             p=str(img.image)
             t=str(img.thumb)
-            d  = str(img.date)
-            print(d,'\n\n\n\n\n\n\n\n\n\n')
             result = img.delete()[0]
             if result == 1:
                 link_obj = Links.objects.get(user=user)
                 link = link_obj.link
                 for key in list(link.keys()):
                     if key!='face_keys':
-                        if (p,t,d) in link[key]['Image_list']:
-                            link[key]['Image_list'].remove((p,t,d))
+                        if (p,t) in link[key]['Image_list']:
+                            link[key]['Image_list'].remove((p,t))
                 link_obj.link = link
                 link_obj.save()
                 del img
@@ -360,7 +358,7 @@ class AddFolder(View):
             form = AddFaceFolderForm()
         else:
             form = AddFolderForm()
-        return render(request,'AddImage.html',{'form':form,'formtype':'Folder'})
+        return render(request,'AddImage.html',{'form':form})
 
     def post(self,request,type):
         user = request.user
